@@ -1,4 +1,5 @@
 import './css/styles.css';
+import debounce from 'lodash.debounce';
 
 //name.official - полное имя страны
 //capital - столица
@@ -11,14 +12,16 @@ import './css/styles.css';
 
 
 const textInput = document.querySelector('#search-box');
-textInput.addEventListener('input', onTextInput);
-//console.log(textInput);
+textInput.addEventListener('input', debounce(inputCountries,300));
 
-function onTextInput(evt) {
-    console.log(evt.target.value);
+function inputCountries(evt) {
+    console.log(evt.target.value.trim());
 }
 
-console.log(fetchCountries('SWIT'));
+
+
+
+//console.log(fetchCountries('SWIT'));
 
 function fetchCountries(name) {
     const DEBOUNCE_DELAY = 300;
