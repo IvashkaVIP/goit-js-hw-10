@@ -28,14 +28,19 @@ body {
 .country-list > li {
   display: flex;
   margin-top: 5;
- }
+  }
 
 .country-list > li > h3 {
   margin: 0 0 0 10; 
   align-items: center;
+  font-weight: 600;
   
 } 
 
 .country-info  {
   margin: 0 0 0 40; 
   }
+
+span {
+  font-weight: lighter;
+}
