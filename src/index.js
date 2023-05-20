@@ -29,21 +29,24 @@ function inputCountries(evt) {
             // return data;
             //console.log(data);
             //list.innerHTML = creatShortMarkup(data);
-            creatShortMarkup(data);
+            list.innerHTML = creatMarkup(data);
         })
       .catch(err => console.error(err));
     }
 
-function creatShortMarkup(arr) {
+function creatMarkup(arr) {
     
-    arr.map(
-        ({ name: { common, official }, flag }) => 
-         `<li> 
-         <img src="${flag}" text="${common}">
-         <h2>${official}</h2>
+    
+    return arr
+      .map(
+        ({ name: { common, official }, flags: { svg } }) =>
+          `<li> 
+         <img src="${svg}" text="${common}" width="35"/>
+         <h3>${official}</h3>
          </li>`
-    );
-    console.log(arr);
+      )
+      .join('');
+    
     // return arr.map(({ name, flag }) => 
     //     `<li> 
     //     <img src="${flag}" text="${name}">
@@ -56,7 +59,7 @@ function creatShortMarkup(arr) {
 
 function fetchCountries(name = '') {
   const BASE_URL = 'https://restcountries.com/v3.1/name/';
-  const ENDPOINT = '?fields=name,capital,population,flag,languages';
+  const ENDPOINT = '?fields=name,capital,population,flags,languages';
 
   const options = {};
 
