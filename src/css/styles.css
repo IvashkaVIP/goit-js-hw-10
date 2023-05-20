@@ -18,6 +18,7 @@ body {
   max-width: 320px;
   margin-bottom: 16px;
   margin-left: 40px;
+  margin-top: 10px;
 }
 
 .country-list {
@@ -34,3 +35,7 @@ body {
   align-items: center;
   
 } 
+
+.country-info  {
+  margin: 0 0 0 40; 
+  }

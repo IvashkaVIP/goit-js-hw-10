@@ -1,5 +1,6 @@
 import './css/styles.css';
 import debounce from 'lodash.debounce';
+import { Notify } from 'notiflix/build/notiflix-notify-aio';
 
 const DEBOUNCE_DELAY = 300;
 
@@ -11,9 +12,10 @@ const DEBOUNCE_DELAY = 300;
 
 //https://restcountries.com/v3.1/all?fields=name,flags`
 
-const textInput = document.querySelector('#search-box');
-const list = document.querySelector('.country-list');
-textInput.addEventListener('input', debounce(inputCountries, DEBOUNCE_DELAY));
+const searchBox = document.querySelector('#search-box');
+const countryList = document.querySelector('.country-list');
+const countryInfo = document.querySelector('.country-info')
+searchBox.addEventListener('input', debounce(inputCountries, DEBOUNCE_DELAY));
 
 //console.log(list);
 
@@ -23,39 +25,67 @@ function inputCountries(evt) {
     fetchCountries(evt.target.value.trim())
         .then(data => {
             if (data.length > 10) {
-                console.log('Too many matches found. Please enter a more specific name.');
+                Notify.failure(
+                  'Too many matches found. Please enter a more specific name.'
+                );
+                  countryList.innerHTML = '';
+                  countryInfo.innerHTML = '';
                 return;
             }
-            // return data;
-            //console.log(data);
-            //list.innerHTML = creatShortMarkup(data);
-            list.innerHTML = creatMarkup(data);
+            if (data.length > 1) {
+                countryInfo.innerHTML = '';
+                countryList.innerHTML = creatMarkupCountriesList(data);
+                return;
+            }
+            countryList.innerHTML = creatMarkupCountriesList(data);
+            countryInfo.innerHTML = creatMarkupCountryInfo(data);
         })
       .catch(err => console.error(err));
     }
 
-function creatMarkup(arr) {
-    
-    
+function creatMarkupCountryInfo(arr) {
     return arr
+      .map(
+        ({
+          name: { common, official },
+          flags: { svg },
+          capital,
+          population,
+          languages,
+        }) => `
+        
+        <h4>Capital: <span>${capital}</span></h4>
+        <h4>Population: <span>${population}</span></h4>
+        <h4>Languages: <span>${Object.values(languages)}</span></h4>
+        `
+      )
+      .join('');
+
+}
+
+//  <div>
+//         <img src="${svg}" alt="${common}" width = "35" />
+//         <h2>${official}</h2>
+//         </div>
+//         <h3>Capital: <span>${capital}</span></h3>
+//         <h3>Population: <span>${population}</span></h3>
+//         <h3>Languages: <span>${Object.values(languages)}</span></h3>
+
+
+
+
+function creatMarkupCountriesList(arr) {
+   return arr
       .map(
         ({ name: { common, official }, flags: { svg } }) =>
           `<li> 
-         <img src="${svg}" text="${common}" width="35"/>
+         <img src="${svg}" alt="${common}" width="35"/>
          <h3>${official}</h3>
          </li>`
       )
-      .join('');
-    
-    // return arr.map(({ name, flag }) => 
-    //     `<li> 
-    //     <img src="${flag}" text="${name}">
-    //     <h2>${name}</h2>
-    //     </li>`).json('');
-    
+      .join('');  
+  
 }
-
-//console.log(fetchCountries('SWIT'));
 
 function fetchCountries(name = '') {
   const BASE_URL = 'https://restcountries.com/v3.1/name/';
@@ -69,6 +99,6 @@ function fetchCountries(name = '') {
     }
     return resp.json();
   });
-  //   .then(data => console.log(data))
-  //   .catch(err => console.log(err));
+  
 }
+
