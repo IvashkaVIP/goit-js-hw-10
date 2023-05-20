@@ -1,2 +1,0 @@
-!function(){var n;document.querySelector("#search-box").addEventListener("input",(function(n){console.log(n.target.value)})),console.log((n="SWIT",fetch("".concat("https://restcountries.com/v3.1/name/").concat(n).concat("?fields=name,capital,population,flag,languages"),{}).then((function(n){if(!n.ok)throw new Error;return n.json()})).then((function(n){return console.log(n)})).catch((function(n){return console.log(n)}))))}();
-//# sourceMappingURL=index.ebd5a42a.js.map
