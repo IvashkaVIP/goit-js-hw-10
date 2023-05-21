@@ -13,11 +13,14 @@ searchBox.addEventListener('input', debounce(inputCountries, DEBOUNCE_DELAY));
 //console.log(list);
 
 function inputCountries(evt) {
-  if (!evt.target.value.trim()) {
+  const inputValue = evt.target.value.trim();
+  if (!inputValue) {
+    countryList.innerHTML = '';
+    countryInfo.innerHTML = '';
     Notify.failure('the field cannot be empty!');
     return;
   }
-  fetchCountries(evt.target.value.trim())
+  fetchCountries(inputValue)
     .then(data => {
       if (data.length > 10) {
         Notify.info(
@@ -36,12 +39,12 @@ function inputCountries(evt) {
       countryInfo.innerHTML = creatMarkupCountryInfo(data);
     })
     .catch(err => {
-        console.log(err);
-        if (err.message === '404') {
-            Notify.failure('Oops, there is no country whith that name');
-        }
-        countryList.innerHTML = '';
-        countryInfo.innerHTML = '';
+      console.log(err);
+      if (err.message === '404') {
+        Notify.failure('Oops, there is no country whith that name');
+      }
+      countryList.innerHTML = '';
+      countryInfo.innerHTML = '';
     });
 }
 
